@@ -21,7 +21,10 @@ void itob(int n, char *s, int b)
         n = -n;
     for (i = 0; n > 0; i++)
     {
-        s[i] = n%b + '0';
+        if (b > 10 && n >= 0)
+            s[i] = n%b -10 + 'a';
+        else
+            s[i] = n%b + '0';
         n /= b;
     }
     if (sign < 0)
