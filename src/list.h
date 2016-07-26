@@ -9,8 +9,8 @@
 
 #include <stdlib.h>
 
-typedef int (*fun_com)(const void *, const void *);
-typedef void (*func_des)(void *);
+typedef int(*fun_com)(const void *, const void *);
+typedef void(*func_des)(void *);
 
 /**Define a structure for linked list elements*/
 typedef struct ListNode_
@@ -30,26 +30,26 @@ typedef struct List_
 } List;
 
 /**List Interface*/
-int list_init (List **list, func_com *compare, func_des *destroy);
-void list_destroy (List *list);
+int list_init(List **list, func_com *compare, func_des *destroy);
+void list_destroy(List *list);
 /**Insert success return 0,failure return -1*/
-int  list_ins_next (List *list, ListNode *element, const void *data);
+int  list_ins_next(List *list, ListNode *element, const void *data);
 
 /**Remove success return 0, failure return -1*/
-int  list_rm_next (List *list, ListNode *element, void **data);
+int  list_rm_next(List *list, ListNode *element, void **data);
 
-ListNode* list_search (const List *list, const void *data, ListNode **prev);
+ListNode* list_search(const List *list, const void *data, ListNode **prev);
 
 /**return the size of list*/
-#define list_size(list) (list)->size
+#define list_size(list)(list)->size
 /**return the head of list*/
-#define list_head(list) (list)->head
+#define list_head(list)(list)->head
 /**return the tail of list*/
-#define list_tail(list) (list)->tail
-#define list_is_head(list, element) ((element) == (list)->head ?1 : 0))
-#define list_is_tail(element) ((element)->next == NULL ? 1 : 0)
-#define list_data(element) ((element)->data)
-#define list_next(element) ((element)->next)
+#define list_tail(list)(list)->tail
+#define list_is_head(list, element)((element) ==(list)->head ?1 : 0))
+#define list_is_tail(element)((element)->next == NULL ? 1 : 0)
+#define list_data(element)((element)->data)
+#define list_next(element)((element)->next)
 
 #endif
 
