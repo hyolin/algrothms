@@ -2,6 +2,7 @@
 #define LOGGER_H_
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 
 enum {
@@ -13,13 +14,13 @@ enum {
 };
 
 #define LOG(level, format, ...) \
-        logger(LL_##level, format, __FILE__, __LINE__, ##__VA_ARGS__)
+        logger(LL_##level, __FILE__, __LINE__, format,  ##__VA_ARGS__)
 
 static const char* LOG_LEVELS[] = {"DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 static const char* LOG_FORMAT = "%Y-%m-%d %H:%M:%M";
 
-void logger(size_t level, const char* format, 
-            const char* filename, size_t line, ...) 
+void logger(size_t level, const char* filename, size_t line, 
+            const char* format, ...) 
 {
     char buf[32] = {0};
     time_t now;
@@ -37,22 +38,19 @@ void logger(size_t level, const char* format,
     va_start(args, format);
     vsprintf(s, format, args);
     va_end(args);
+    FILE* fileno;
     switch (level) {
-        case LL_DEBUG:
-        case LL_INFO:
-        case LL_WARN:
-            fprintf(stdout, "%s %s[line: %d] %s %s\n", \
-                    buf, filename, line, LOG_LEVELS[level], s);
-            break;
         case LL_ERROR:
-            fprintf(stderr, "%s %s[line: %d] %s %s\n", \
-                    buf, filename, line, LOG_LEVELS[level], s);
-            break;
         case LL_FATAL:
-            fprintf(stderr, "%s %s[line: %d] %s %s\n", \
-                    buf, filename, line, LOG_LEVELS[level], s);
-            exit(-1); 
+            fileno = stderr;
+            break;
+        default:
+            fileno = stdout;
     }
+    fprintf(fileno, "%s %s[line:%lu] %s %s\n", 
+            buf, filename, line, LOG_LEVELS[level], s);
+    if (level == LL_FATAL) 
+        exit(-1);
 }
 
 #endif
